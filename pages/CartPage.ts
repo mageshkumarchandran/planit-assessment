@@ -1,81 +1,80 @@
 import { Locator, Page, expect } from '@playwright/test';
-import { Utils } from '../utils/utils';
+import { Utils } from '../utility/utils';
 
 
 export class CartPage {
   readonly page: Page;
-  readonly tableHeder: Locator;
+  readonly tableHeader: Locator;
   readonly tableBody: Locator;
   readonly menuCart: Locator;
-  readonly total: Locator
+  readonly totalAmount: Locator;
+
   constructor(page: Page) {
     this.page = page;
-    this.tableHeder = page.locator('table th');
+    this.tableHeader = page.locator('table th');
     this.tableBody = page.locator('table tbody tr');
-    this.total = page.locator('strong', { hasText: 'Total' });
+    this.totalAmount = page.locator('strong', { hasText: 'Total' });
     this.menuCart = page.getByRole('link', { name: 'Cart (' });
 
   }
 
+  async getTableColumnIndex(columnName: string, tableHeader: Locator): Promise<number> 
+  {
+    const allColumnNames: string[] = await tableHeader.allTextContents();
+    return allColumnNames.findIndex(header => header.trim() === columnName);
+  }
+  
+  async sumColumnValues(columnName: string, tableHeader: Locator): Promise<number> {
 
-  async getTableColumnIndex(column: string, locator: Locator): Promise<number> {
-    const getHeaders: string[] = await locator.allTextContents();
-    return getHeaders.findIndex(header => header.trim() === column);
+    const columnIndex = await this.getTableColumnIndex(columnName, tableHeader)
+    const cellTexts = await this.tableBody.locator(`td:nth-child(${columnIndex + 1})`).allTextContents();
+    const numericValues = cellTexts.map(text => Utils.removeNonDigits(text));
+    const total=numericValues.reduce((sum, val) => sum + val, 0);
+
+    return total;
 
   }
-  async covertTextToNumber(text: string): Promise<number> {
+  async getColumnValues(product: string, columnName: string): Promise<string> {
+    let columnValue:string;
+    const columnIndex = await this.getTableColumnIndex(columnName, this.tableHeader)
+    if (columnName != 'Quantity') 
+      columnValue = await this.tableBody.filter({ hasText: product }).locator(`td:nth-child(${columnIndex + 1})`).textContent() ?? '';
+    else 
+      columnValue = await this.tableBody.filter({ hasText: product }).locator(`td:nth-child(${columnIndex + 1}) input`).getAttribute('value') ?? '';
 
-    return parseFloat(text);
-
+    return columnValue;
   }
-  async sumValuesFromSpecificColumnInTable(column: string, headerLocator: Locator, bodyLocator: Locator): Promise<number> {
+
+
+  async validateTotal(columnName: string) {
     await this.page.waitForSelector('table');
-    const indeex = await this.getTableColumnIndex(column, headerLocator)
-    const val = await this.tableBody.locator(`td:nth-child(${indeex + 1})`).allTextContents();
-    const total = val.map(text => parseFloat(text.replace(/[^0-9.]/g, '')));
-    return total.reduce((sum, val) => sum + val, 0);
+    const actualTotal = await this.totalAmount.textContent()
+    const expectedTotal = await this.sumColumnValues(columnName, this.tableHeader);
 
-  }
-  async getValueFromSpecificColumnInTable(product: string, column: string): Promise<string> {
-    let val = null;
-    const indeex = await this.getTableColumnIndex(column, this.tableHeder)
-    if (column != 'Quantity') {
-      val = await this.tableBody.filter({ hasText: product }).locator(`td:nth-child(${indeex + 1})`).textContent() ?? '';
-    }
-    else {
-      val = await this.tableBody.filter({ hasText: product }).locator(`td:nth-child(${indeex + 1}) input`).getAttribute('value') ?? '';
-
-    }
-    return val;
-  }
-
-
-  async validateTotal(price: string) {
-    await this.page.waitForSelector('table');
-    const actual = await this.total.textContent()
-
-    const tt = await this.sumValuesFromSpecificColumnInTable(price, this.tableHeder, this.tableBody);
-    await expect(actual).toContain(tt.toString());
-
+    await expect(actualTotal).toContain(expectedTotal.toString());
 
   }
 
-  async validateSubtotal(product: string[], price: string, quality: string) {
-    for (const productw of product) {
+  async validateSubtotal(productNames: string[], priceColumn: string, qualityColumn: string) {
 
-      const priceValaue = await this.getValueFromSpecificColumnInTable(productw, price);
-      const QuantityValaue = await this.getValueFromSpecificColumnInTable(productw, quality);
-      let expected = Utils.removeNonDigits(priceValaue) * Utils.removeNonDigits(QuantityValaue);
-      const actual = await this.getValueFromSpecificColumnInTable(productw, 'Subtotal');
-      await expect(actual).toEqual(Utils.formatCurrency(expected));
+    for (const product of productNames) {
+
+      const priceValue = await this.getColumnValues(product, priceColumn);
+      const quantityValue = await this.getColumnValues(product, qualityColumn);
+      const expectedSubTotal = Utils.removeNonDigits(priceValue) * Utils.removeNonDigits(quantityValue);
+      const actualSubTotal = await this.getColumnValues(product, 'Subtotal');
+
+      await expect(actualSubTotal).toEqual(Utils.formatCurrency(expectedSubTotal));
     }
   }
 
-  async validatePrice(product: string[], mapp: Map<string, string>) {
-    for (const productw of product) {
-      const actual = await this.getValueFromSpecificColumnInTable(productw, 'Price');
-      const expected = mapp.get(productw);
-      await expect(actual).toEqual(expected);
+  //This function compares the selected product price from Shop page with the Cart page
+  async validatePrice(productNames: string[], priceMap: Map<string, string>) {
+    for (const product of productNames) {
+      const actualPrice = await this.getColumnValues(product, 'Price');
+      const expectedPrice = priceMap.get(product);
+
+      await expect(actualPrice).toEqual(expectedPrice);
     }
   }
 

@@ -1,9 +1,12 @@
-import { defineConfig } from '@playwright/test';
+import { chromium, defineConfig } from '@playwright/test';
 
-export const browserName = 'chromium';
+type BrowserName = 'chromium' | 'firefox' | 'webkit';
+const browser = process.env.BROWSER;
+
+const browserName: BrowserName = isBrowserName(browser) ? browser : 'chromium';
 
 export default defineConfig({
-   reporter: [['html', { open: 'always' }]],
+  reporter: [['html', { open: 'always' }]],
   testDir: './tests',
   projects: [
     {
@@ -16,3 +19,7 @@ export default defineConfig({
     }
   ]
 });
+
+function isBrowserName(browser: string | undefined): browser is BrowserName {
+  return browser === 'chromium' || browser === 'firefox' || browser === 'webkit';
+}

@@ -10,31 +10,29 @@ export class ShopPage {
   constructor(page: Page) {
     this.page = page;
     this.listProduct = page.locator('li');
-    this.menuShop = page.getByRole('link',{name:'Shop',exact: true });
- 
+    this.menuShop = page.getByRole('link', { name: 'Shop', exact: true });
+
   }
 
-  async getProductPrice(product:string[]):Promise<Map<string, string>>
-  {
+  async getProductPrice(products: string[]): Promise<Map<string, string>> {
     const pricesMap = new Map<string, string>();
-    for (const name of product) {
-    const price=await this.listProduct.filter({hasText:name});
-    const tt=await price.locator('span').textContent();
-    pricesMap.set(name, tt?? '');
-   
+    for (const product of products) {
+      const productRow = await this.listProduct.filter({ hasText: product });
+      const price = await productRow.locator('span').textContent();
+      pricesMap.set(product, price ?? '');
+
     }
-     return pricesMap;
+    return pricesMap;
   }
 
- async addProducts() {
+  async addProducts() {
     for (const product of testData.products) {
-    for (let i = 0; i < product.count; i++) {
-      const productName:Locator=this.listProduct.filter({hasText:product.name});
-      await productName.getByRole('link',{name:'Buy'}).click();
-     
-    }
-  }    
- } 
+      for (let i = 0; i < product.count; i++) {
+        const productName: Locator = this.listProduct.filter({ hasText: product.name });
+        await productName.getByRole('link', { name: 'Buy' }).click();
 
+      }
+    }
+  }
 
 }
