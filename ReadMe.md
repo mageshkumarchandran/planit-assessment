@@ -5,7 +5,7 @@
 
 ## Framework Explanation
 
- This framework is implemented using the Page Object Model (POM) design pattern for better maintainability and scalability.
+ This framework is built using Playwright with TypeScript, following the Page object model design for better maintainability and scalability.
 
     *  pages/             - for page classes,
     *  tests/             - for test case specs,
@@ -38,7 +38,7 @@ Make sure you have Node.js (am using 20.16.0) installed, else install nvm then n
 
      BROWSER - chromium , firefox ,webkit (chromium-default)
 
-  I have added below tags in the tests ,it can be changed if required.
+  I have added below tags in the tests ,it can be changed in file "playwright.config.ts" if required.
 
     @executeTest ,@contactSubmit,@addProduct,@errorValidation
 
