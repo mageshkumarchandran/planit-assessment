@@ -5,6 +5,6 @@ export function generateContactData() {
     firstName: faker.person.firstName(),
     email: faker.internet.email(),
     message: faker.lorem.sentence()
-   
+
   };
 }

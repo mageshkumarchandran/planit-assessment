@@ -17,13 +17,24 @@ export class CartPage {
     this.menuCart = page.getByRole('link', { name: 'Cart (' });
 
   }
-
+/**
+ * Get the index of specific column in a table
+ * @param columnName - name of the column in table
+ * @param tableHeader -locator of the table header
+ * @returns column index
+ */
   async getTableColumnIndex(columnName: string, tableHeader: Locator): Promise<number> 
   {
     const allColumnNames: string[] = await tableHeader.allTextContents();
     return allColumnNames.findIndex(header => header.trim() === columnName);
   }
   
+  /**
+   * Sum the values from specific column in a table
+   * @param columnName 
+   * @param tableHeader 
+   * @returns sum of values
+   */
   async sumColumnValues(columnName: string, tableHeader: Locator): Promise<number> {
 
     const columnIndex = await this.getTableColumnIndex(columnName, tableHeader)
@@ -34,6 +45,13 @@ export class CartPage {
     return total;
 
   }
+
+  /**
+   * Get the value from specific column and row in a table
+   * @param product -name of the product
+   * @param columnName 
+   * @returns value of a specific cell 
+   */
   async getColumnValues(product: string, columnName: string): Promise<string> {
     let columnValue:string;
     const columnIndex = await this.getTableColumnIndex(columnName, this.tableHeader)
@@ -45,7 +63,10 @@ export class CartPage {
     return columnValue;
   }
 
-
+/**
+* Validates that the total amount matches the sum of product prices listed in the table.
+ * @param columnName 
+ */
   async validateTotal(columnName: string) {
     await this.page.waitForSelector('table');
     const actualTotal = await this.totalAmount.textContent()
@@ -55,6 +76,12 @@ export class CartPage {
 
   }
 
+  /**
+   *  * Validates that the sub total of each product matches the price multiplied by quantity in the table.
+   * @param productNames  - list of products added
+   * @param priceColumn   -column name(price)
+   * @param qualityColumn  - column name(quantity)
+   */
   async validateSubtotal(productNames: string[], priceColumn: string, qualityColumn: string) {
 
     for (const product of productNames) {
@@ -68,7 +95,11 @@ export class CartPage {
     }
   }
 
-  //This function compares the selected product price from Shop page with the Cart page
+  /**
+   *  Compare the selected product price from Shop page with the Cart page
+   * @param productNames - list of products
+   * @param priceMap - Map contains product as key and price as value
+   */
   async validatePrice(productNames: string[], priceMap: Map<string, string>) {
     for (const product of productNames) {
       const actualPrice = await this.getColumnValues(product, 'Price');

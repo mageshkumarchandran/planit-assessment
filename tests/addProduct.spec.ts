@@ -4,6 +4,7 @@ import { ContactPage } from '../pages/ContactPage'
 import { ShopPage } from '../pages/ShopPage'
 import testData from '../test-data/testData.json'
 import { generateContactData } from '../test-data/testDataGenerator';
+import { errorDescription } from '../interfaces/interface'
 
 
 let cartPage: CartPage;
@@ -16,14 +17,17 @@ test.beforeEach(async ({ page }) => {
 
 });
 
-test('Validate errors on contact screen @errorValidation @aa', async ({ }, testInfo) => {
+test('Validate errors on contact screen @errorValidation @executeTest', async ({ }, testInfo) => {
 
   await contactPage.menuContact.click();
   await contactPage.buttonSubmit.click();
 
-  await contactPage.validateErrorDescription([{ element: contactPage.errorForeName, errorKey: 'forename' },
+  //create object with element locators and error descriptions
+  const errors: errorDescription[] = [{ element: contactPage.errorForeName, errorKey: 'forename' },
   { element: contactPage.errorEmail, errorKey: 'email' },
-  { element: contactPage.errorMessage, errorKey: 'message' }]);
+  { element: contactPage.errorMessage, errorKey: 'message' }]
+
+  await contactPage.validateErrorDescription(errors);
 
   testInfo.annotations.push({
     type: 'info',
@@ -33,8 +37,9 @@ test('Validate errors on contact screen @errorValidation @aa', async ({ }, testI
 });
 
 for (let i = 1; i <= 5; i++) {
-  test(`Submit contact details ${i} @contactSubmit @aa`, async ({ }, testInfo) => {
+  test(`Submit contact details ${i} @contactSubmit @executeTest`, async ({ }, testInfo) => {
 
+    //test data is unique for each iterations
     const data = generateContactData();
 
     await contactPage.menuContact.click();
@@ -49,13 +54,13 @@ for (let i = 1; i <= 5; i++) {
   });
 }
 
-test('Add products and validate price and total @addProduct @aa ', async ({ page }, testInfo) => {
+test('Add products and validate price and total @addProduct @executeTest ', async ({ page }, testInfo) => {
 
   shopPage = new ShopPage(page);
   cartPage = new CartPage(page);
 
   await shopPage.menuShop.click();
-  await shopPage.addProducts();
+  await shopPage.addProducts(testData.products);
 
   const productNames = testData.products.map(product => product.name);
   const productPrice = await shopPage.getProductPrice(productNames);

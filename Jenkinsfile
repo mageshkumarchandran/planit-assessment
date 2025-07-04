@@ -20,7 +20,7 @@ pipeline {
 
         stage('Run Playwright tests') {
             steps {
-                bat 'npx playwright test --grep @aa'
+                bat 'npx playwright test --grep @executeTest'
             }
         }
     }

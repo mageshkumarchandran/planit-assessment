@@ -2,10 +2,12 @@ import { Locator, Page, expect } from '@playwright/test';
 import testData from '../test-data/testData.json';
 import { generateContactData } from '../test-data/testDataGenerator'
 import { Utils } from '../utility/utils';
+import {errorDescription} from '../interfaces/interface'
 
 type record = ReturnType<typeof generateContactData>;
 
 let firstName: string;
+
 export class ContactPage {
 
   readonly page: Page;
@@ -35,9 +37,12 @@ export class ContactPage {
 
   }
 
-  async validateErrorDescription(errorsDes: {
-    element: Locator,
-    errorKey: keyof typeof testData.errorDescriptions }[]) {
+
+  /**
+   * Validate the error description on mandatory fields
+   * @param errorsDes 
+   */
+  async validateErrorDescription(errorsDes: errorDescription []) {
 
     for (const error of errorsDes) {
       const actualError = await error.element.textContent();
@@ -48,7 +53,10 @@ export class ContactPage {
     }
 
   }
-
+/**
+ * Submit contact details 
+ * @param testData - fetch the test data
+ */
   async submitContactDetails(testData: record) {
 
     firstName = testData.firstName;
@@ -59,10 +67,13 @@ export class ContactPage {
     await Utils.waitForElementToHidden(this.alertFeedback);
 
   }
-
-  async validateSubmission(actual: string) {
-    const actualValue = "Thanks" + ' ' + firstName + ', ' + actual;
-    const expectedValue = (await this.alertSuccess.textContent())?.trim();
+/**
+ * Validate successful submission message
+ * @param expected - expected message on successful submission
+ */
+  async validateSubmission(expected: string) {
+    const expectedValue = "Thanks" + ' ' + firstName + ', ' + expected;
+    const actualValue = (await this.alertSuccess.textContent())?.trim();
 
     await expect(actualValue).toContain(expectedValue);
 
