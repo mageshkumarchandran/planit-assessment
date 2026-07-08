@@ -1,4 +1,4 @@
-import { chromium, defineConfig } from "@playwright/test";
+import { defineConfig } from "@playwright/test";
 
 type BrowserName = "chromium" | "firefox" | "webkit";
 const browser = process.env.BROWSER;

@@ -3,11 +3,14 @@ import { ContactPage } from "../pages/ContactPage";
 import testData from "../test-data/testData.json";
 import { generateContactData } from "../test-data/testDataGenerator";
 import { errorDescription } from "../interfaces/interface";
+
 let contactPage: ContactPage;
 test.beforeEach(async ({ page }) => {
   contactPage = new ContactPage(page);
   await page.goto("/");
 });
+
+const iteration =5
 
 test("Validate errors on contact screen @errorValidation @executeTest", async ({}, testInfo) => {
   await contactPage.menuContact.click();
@@ -29,8 +32,9 @@ test("Validate errors on contact screen @errorValidation @executeTest", async ({
   });
 });
 
-for (let i = 1; i <= 5; i++) {
+for (let i = 1; i <= iteration; i++) {
   test(`Submit contact details ${i} @contactSubmit @executeTest`, async ({}, testInfo) => {
+
     //test data is unique for each iterations
     const data = generateContactData();
 
