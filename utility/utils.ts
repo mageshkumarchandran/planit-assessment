@@ -1,10 +1,8 @@
-import { Locator, Page } from '@playwright/test';
-
+import { Locator } from "@playwright/test";
 
 export class Utils {
-
   static async waitForElementToHidden(locator: Locator) {
-    await locator.waitFor({ state: 'hidden' });
+    await locator.waitFor({ state: "hidden" });
   }
 
   static async getAttributeValue(locator: Locator, attribute: string) {
@@ -12,19 +10,16 @@ export class Utils {
   }
 
   static removeNonDigits(attribute: string) {
-    return parseFloat(attribute.replace(/[^0-9.]/g, ''));
+    return parseFloat(attribute.replace(/[^0-9.]/g, ""));
   }
 
   static formatCurrency(value: number): string {
-
-    const formatter = new Intl.NumberFormat('en-NZ', {
-      style: 'currency',
-      currency: 'NZD',
+    const formatter = new Intl.NumberFormat("en-NZ", {
+      style: "currency",
+      currency: "NZD",
     });
 
     const formatted = formatter.format(value);
     return formatted;
   }
-
 }
-

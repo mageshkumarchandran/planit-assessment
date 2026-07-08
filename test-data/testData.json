@@ -1,23 +1,23 @@
 {
-    "products": [
-        {
-            "name": "Stuffed Frog",
-            "count": 2
-        },
-        {
-            "name": "Fluffy Bunny",
-            "count": 5
-        },
-        {
-            "name": "Valentine Bear",
-            "count": 3
-        }
-    ],
-    "errorDescriptions": {
-        "forename": "Forename is required",
-        "email": "Email is required",
-        "message": "Message is required",
-        "alert":"We welcome your feedback - but we won't get it unless you complete the form correctly."
+  "products": [
+    {
+      "name": "Stuffed Frog",
+      "count": 2
     },
-    "feedback": "we appreciate your feedback."
+    {
+      "name": "Fluffy Bunny",
+      "count": 5
+    },
+    {
+      "name": "Valentine Bear",
+      "count": 3
+    }
+  ],
+  "errorDescriptions": {
+    "forename": "Forename is required",
+    "email": "Email is required",
+    "message": "Message is required",
+    "alert": "We welcome your feedback - but we won't get it unless you complete the form correctly."
+  },
+  "feedback": "we appreciate your feedback."
 }

@@ -1,25 +1,27 @@
-import { chromium,defineConfig } from '@playwright/test';
+import { chromium, defineConfig } from "@playwright/test";
 
-type BrowserName = 'chromium' | 'firefox' | 'webkit';
+type BrowserName = "chromium" | "firefox" | "webkit";
 const browser = process.env.BROWSER;
 
-const browserName: BrowserName = isBrowserName(browser) ? browser : 'chromium';
+const browserName: BrowserName = isBrowserName(browser) ? browser : "chromium";
 
 export default defineConfig({
-  reporter: [['html', { open: 'always' }]],
-  testDir: './tests',
+  reporter: [["html", { open: "always" }]],
+  testDir: "./tests",
   projects: [
     {
-      name: 'Toys application',
+      name: "Toys application",
       use: {
-        baseURL: 'http://jupiter.cloud.planittesting.com',
+        baseURL: "http://jupiter.cloud.planittesting.com",
         headless: true,
         browserName,
       },
-    }
-  ]
+    },
+  ],
 });
 
 function isBrowserName(browser: string | undefined): browser is BrowserName {
-  return browser === 'chromium' || browser === 'firefox' || browser === 'webkit';
+  return (
+    browser === "chromium" || browser === "firefox" || browser === "webkit"
+  );
 }

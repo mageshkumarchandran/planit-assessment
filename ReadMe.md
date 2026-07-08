@@ -25,11 +25,16 @@ Make sure you have Node.js (am using 24.9) installed, else install node.
     npm install @faker-js/faker --save-dev
     npm install -D typescript ts-node (to install type script)
 
+To format the code and fix linting error:
+    npm install --save-dev @stylistic/eslint-plugin
+    npm install --save-dev jiti
+    npm install --save-dev prettier
+
 
 ## How to run the test
   Open the terminal,navigate to project path and run below command:
 
-  To run test:
+  *To run test:*
 
      BROWSER=chromium npx playwright test --grep @executeTest
 
@@ -38,6 +43,9 @@ Make sure you have Node.js (am using 24.9) installed, else install node.
   I have added below tags in the tests ,it can be changed in file "playwright.config.ts" if required.
 
     @executeTest ,@contactSubmit,@addProduct,@errorValidation
+
+  *To format the code*
+      Run  -  npm run format
 
 ## Reports
     Html report will be generated under playwright-report folder after test completion
@@ -57,6 +65,13 @@ Make sure you have Node.js (am using 24.9) installed, else install node.
          -v /var/run/docker.sock:/var/run/docker.sock \
          -v jenkins_home:/var/jenkins_home \
          jenkins/jenkins:lts
+
+      * Run the below commend to pull jenkins and playwright image
+
+          docker pull mcr.microsoft.com/playwright:v1.61.1-noble
+          docker pull jenkins/jenkins:lts
+
+
 
       * Run below command to install docker CLI for jenkins
 
