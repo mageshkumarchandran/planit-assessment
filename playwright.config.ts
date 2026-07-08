@@ -13,7 +13,7 @@ export default defineConfig({
       name: "Toys application",
       use: {
         baseURL: "http://jupiter.cloud.planittesting.com",
-        headless: true,
+        headless: false,
         browserName,
       },
     },

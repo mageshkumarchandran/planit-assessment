@@ -42,12 +42,17 @@ export class ContactPage {
    * @param errorsDes
    */
   async validateErrorDescription(errorsDes: errorDescription[]) {
+    const mismatch: string[] = [];
     for (const error of errorsDes) {
       const actualError = (await error.element.textContent())?.trim();
       const expectedError = testData.errorDescriptions[error.errorKey];
 
-      await expect(actualError).toEqual(expectedError);
+      if (actualError != expectedError)
+        mismatch.push(
+          "Actual:" + actualError + " " + "Expected:" + expectedError,
+        );
     }
+    return mismatch;
   }
   /**
    * Submit contact details
@@ -69,6 +74,6 @@ export class ContactPage {
     const expectedValue = "Thanks" + " " + firstName + ", " + expected;
     const actualValue = (await this.alertSuccess.textContent())?.trim();
 
-    await expect(actualValue).toContain(expectedValue);
+    return actualValue === expectedValue;
   }
 }

@@ -18,7 +18,7 @@
 
 
 ## Installation Dependencies:
-Make sure you have Node.js (am using 24.9) installed, else install node.
+Make sure you got Node.js (am using 24.9) installed, else install it then below libraries.
 
     npm install (for node_modules)
     npm install -D @playwright/test
@@ -46,10 +46,11 @@ Make sure you have Node.js (am using 24.9) installed, else install node.
     @executeTest ,@contactSubmit,@addProduct,@errorValidation
 
   *To format the code*
-      Run  -  npm run format
+
+    Run  -  npm run format
 
 ## Reports
-    Html report will be generated under playwright-report folder after test completion
+    Html report will be generated under playwright-report folder after test completion.
 
 ## Docker and Jenkins Integration
 
@@ -81,15 +82,24 @@ Make sure you have Node.js (am using 24.9) installed, else install node.
 
   *Jenkins Job Configuration:*
 
-      * Start the jenkins(copy the credentials to be used in jenkins)
+      * Run the Docker(copy the credentials from Docker logs to login in Jenkins)
+
       * Launch jenkins url - http://localhost:8080
+
       * install the Plugins - Git,Pipeline,NodeJS,HTML Publisher,docker
+
       * Create a Pipeline Project in Jenkins
+
       * Select "Pipeline script from SCM" as the definition.
+
       * SCM- git
+
       * Repository URL: https://github.com/mageshkumarchandran/planit-assessment.git
+
       * Branch: main
+
       * Script Path: Jenkinsfile
+
       * Add parameter:Name: BROWSER,Type: String(leave blank to use chromium by default)
 
   Test Reports:
