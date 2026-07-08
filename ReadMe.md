@@ -25,7 +25,8 @@ Make sure you have Node.js (am using 24.9) installed, else install node.
     npm install @faker-js/faker --save-dev
     npm install -D typescript ts-node (to install type script)
 
-To format the code and fix linting error:
+*To format the code:*
+
     npm install --save-dev @stylistic/eslint-plugin
     npm install --save-dev jiti
     npm install --save-dev prettier
