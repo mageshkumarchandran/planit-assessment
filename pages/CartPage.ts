@@ -39,12 +39,12 @@ export class CartPage {
     columnName: string,
     tableHeader: Locator,
   ): Promise<number> {
-    const columnIndex = await this.getTableColumnIndex(columnName, tableHeader);
-    const cellTexts = await this.tableBody
+    const columnIndex:number = await this.getTableColumnIndex(columnName, tableHeader);
+    const cellTexts:string[] = await this.tableBody
       .locator(`td:nth-child(${columnIndex + 1})`)
       .allTextContents();
-    const numericValues = cellTexts.map((text) => Utils.removeNonDigits(text));
-    const total = numericValues.reduce((sum, val) => sum + val, 0);
+    const numericValues:number[] = cellTexts.map((text) => Utils.removeNonDigits(text));
+    const total:number = numericValues.reduce((sum, val) => sum + val, 0);
 
     return total;
   }
@@ -57,7 +57,7 @@ export class CartPage {
    */
   async getColumnValues(product: string, columnName: string): Promise<string> {
     let columnValue: string;
-    const columnIndex = await this.getTableColumnIndex(
+    const columnIndex:number = await this.getTableColumnIndex(
       columnName,
       this.tableHeader,
     );

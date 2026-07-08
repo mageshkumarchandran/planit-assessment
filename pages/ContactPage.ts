@@ -44,8 +44,8 @@ export class ContactPage {
   async validateErrorDescription(errorsDes: errorDescription[]) {
     const mismatch: string[] = [];
     for (const error of errorsDes) {
-      const actualError = (await error.element.textContent())?.trim();
-      const expectedError = testData.errorDescriptions[error.errorKey];
+      const actualError:string|undefined = (await error.element.textContent())?.trim();
+      const expectedError:string = testData.errorDescriptions[error.errorKey];
 
       if (actualError != expectedError)
         mismatch.push(
@@ -71,8 +71,8 @@ export class ContactPage {
    * @param expected - expected message on successful submission
    */
   async validateSubmission(expected: string) {
-    const expectedValue = "Thanks" + " " + firstName + ", " + expected;
-    const actualValue = (await this.alertSuccess.textContent())?.trim();
+    const expectedValue:string = "Thanks" + " " + firstName + ", " + expected;
+    const actualValue:string|undefined = (await this.alertSuccess.textContent())?.trim();
 
     return actualValue === expectedValue;
   }
