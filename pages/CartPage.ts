@@ -91,7 +91,7 @@ export class CartPage {
       columnName,
       this.tableHeader,
     );
-    return actualTotal == expectedTotal;
+    return actualTotal === expectedTotal;
   }
 
   /**
@@ -114,7 +114,8 @@ export class CartPage {
 
       const actualSubTotal: number = Utils.covertToNumber(subTotal);
 
-      if (actualSubTotal != expectedSubTotal) failures.push(product);
+      if (actualSubTotal !== expectedSubTotal)
+        failures.push(product);
     }
     return failures;
   }
@@ -131,7 +132,7 @@ export class CartPage {
       const actualPrice: string = await this.getColumnValues(product, "Price");
       const expectedPrice: string | undefined = priceMap.get(product);
 
-      if (actualPrice != expectedPrice)
+      if (actualPrice !== expectedPrice)
         mismatch.push(
           product + ":" + "actual" + actualPrice + "expected:" + expectedPrice,
         );
